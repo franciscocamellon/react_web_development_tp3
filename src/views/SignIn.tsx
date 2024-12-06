@@ -15,7 +15,7 @@ import { handleOnChange } from "../utils/core";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
-  const { showSnackMessage, showAlertMessage, supabase } = useAppContext();
+  const { showSnackMessage, translate, supabase } = useAppContext();
   const [data, setData] = useState({
     email: {
       value: "",
@@ -61,14 +61,14 @@ const SignIn: React.FC = () => {
           item={true}
           size={{ xs: 12 }}
         >
-          <Typography variant={"h3"}>Login</Typography>
+          <Typography variant={"h3"}>{translate("login")}</Typography>
         </Grid>
         <Grid sx={styles.centerBox} item={true} size={{ xs: 12 }}>
-          <Typography variant={"h5"}>Seja bem-vindo!</Typography>
+          <Typography variant={"h5"}>{translate("welcome")}</Typography>
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <TextField
-            label="E-mail"
+            label={translate("email")}
             fullWidth={true}
             onChange={(event) =>
               handleOnChange(data, setData, event.target.value, "email")
@@ -78,7 +78,7 @@ const SignIn: React.FC = () => {
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <TextField
-            label="Senha"
+            label={translate("password")}
             fullWidth={true}
             onChange={(event) =>
               handleOnChange(data, setData, event.target.value, "password")
@@ -92,11 +92,11 @@ const SignIn: React.FC = () => {
           item={true}
           size={{ xs: 12 }}
         >
-          <Link to="/signup">Cadastrar</Link>
+          <Link to="/signup">{translate("register")}</Link>
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <Button fullWidth={true} onClick={verifyLogin}>
-            Entrar
+            {translate("sign-in")}
           </Button>
         </Grid>
       </Grid>

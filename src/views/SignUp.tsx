@@ -98,14 +98,14 @@ const SignUp: React.FC = () => {
           item={true}
           size={{ xs: 12 }}
         >
-          <Typography variant={"h3"}>Login</Typography>
+          <Typography variant={"h3"}>{translate("register")}</Typography>
         </Grid>
         <Grid sx={styles.centerBox} item={true} size={{ xs: 12 }}>
-          <Typography variant={"h5"}>Seja bem-vindo!</Typography>
+          <Typography variant={"h5"}>{translate("welcome")}</Typography>
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <TextField
-            label="E-mail"
+            label={translate("email")}
             fullWidth={true}
             onChange={(event) =>
               handleOnChange(data, setData, event.target.value, "email")
@@ -117,7 +117,7 @@ const SignUp: React.FC = () => {
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <TextField
-            label="Senha"
+            label={translate("password")}
             fullWidth={true}
             onChange={(event) =>
               handleOnChange(data, setData, event.target.value, "password")
@@ -130,7 +130,7 @@ const SignUp: React.FC = () => {
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <TextField
-            label="Confirmar senha"
+            label={translate("confirm-password")}
             fullWidth={true}
             onChange={(event) =>
               handleOnChange(
@@ -149,11 +149,11 @@ const SignUp: React.FC = () => {
           item={true}
           size={{ xs: 12 }}
         >
-          <Link to="/signin">Entrar</Link>
+          <Link to="/signin">{translate("sign-in")}</Link>
         </Grid>
         <Grid sx={styles.marginTop} item={true} size={{ xs: 12 }}>
           <Button fullWidth={true} onClick={verifyRegister}>
-            Registrar
+            {translate("register")}
           </Button>
         </Grid>
       </Grid>

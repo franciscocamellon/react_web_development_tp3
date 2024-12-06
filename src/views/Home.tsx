@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 import { ACTIONS } from "../constants/actions";
 import { get, list } from "../services/database";
 import { getUser } from "../utils/core";
+import { useAppContext } from "../Context";
 
 const Home: React.FC = () => {
+  const { translate } = useAppContext();
   const navigate = useNavigate();
   const theme = useTheme();
   const user = getUser();
@@ -72,7 +74,7 @@ const Home: React.FC = () => {
                   {profile?.height} cm
                 </Typography>
                 <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
-                  Comprimento
+                  {translate("height")}
                 </Typography>
               </Box>
             </Grid>
@@ -89,7 +91,7 @@ const Home: React.FC = () => {
                   {profile?.name}
                 </Typography>
                 <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
-                  x dia(s)
+                  x {translate("days")}
                 </Typography>
               </Box>
             </Grid>
@@ -119,7 +121,7 @@ const Home: React.FC = () => {
                   {profile?.weight} kg
                 </Typography>
                 <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
-                  Peso
+                  {translate("weight")}
                 </Typography>
               </Box>
             </Grid>
