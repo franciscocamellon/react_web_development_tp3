@@ -1,50 +1,52 @@
-const generateUUID = () => {
-  return "uid-" + Math.random().toString(36).substring(2, 18);
-};
+import { createClient } from "@supabase/supabase-js";
+import { getUser } from "../utils/core";
 
-const update = (data, id) => {
-  const totalData = list();
-  const index = totalData.findIndex((item) => item.id === id);
-  totalData[index] = data;
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+const user = getUser();
 
-  updateStorage(totalData);
-};
-
-const drop = (id) => {
-  const totalData = list();
-  const index = totalData.findIndex((item) => item.id === id);
-  totalData.splice(index, 1);
-
-  updateStorage(totalData);
-};
-
-const get = (id) => {
-  const totalData = list();
-  return totalData.find((item) => item.id === id);
-};
-
-const list = () => {
-  const data = localStorage.getItem("items");
-  if (data) {
-    return JSON.parse(data);
+const update = async (table, data, id) => {
+  if (id) {
+    data.id = id;
   }
-  return [];
+
+  return await supabase.from(table).upsert(data).select();
 };
 
-const save = (data) => {
-  const totalData = list();
-
-  const d = {
-    id: generateUUID(),
-    ...data,
-  };
-
-  totalData.push(d);
-  updateStorage(totalData);
+const drop = async (table, id) => {
+  return await supabase.from(table).delete().eq("id", id);
 };
 
-const updateStorage = (data) => {
-  localStorage.setItem("items", JSON.stringify(data));
+const get = async (table, conditions) => {
+  let query = supabase.from(table).select();
+
+  for (let condition of conditions) {
+    query = query.eq(condition.field, condition.value);
+  }
+  const { data, error } = await query.order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+  return data[0];
+};
+
+const list = async (table) => {
+  const { data, error } = await supabase
+    .from(table)
+    .select()
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const save = (table, data) => {
+  update(table, data, null);
 };
 
 export { save, update, drop, get, list };

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Avatar, Box, Typography, CardNewItem, CustomList } from "../components";
+import {
+  Grid,
+  Avatar,
+  Box,
+  Typography,
+  CardNewItem,
+  CustomList,
+} from "../components";
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { IconButton } from "@mui/material";
@@ -7,16 +14,23 @@ import { useTheme } from "@mui/material/styles";
 import baby from "../assets/img/baby.png";
 import { useNavigate } from "react-router-dom";
 import { ACTIONS } from "../constants/actions";
-import { list } from "../services/database";
+import { get, list } from "../services/database";
+import { getUser } from "../utils/core";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const user = getUser();
 
   const [data, setData] = useState([]);
+  const [profile, setProfile] = useState({});
 
-  const loadData = () => {
-    const d = list();
+  const loadData = async () => {
+    const d = await list("action_students");
+    const profile = await get("profile_students", [
+      { field: "user_id", value: user.id },
+    ]);
+    setProfile(profile);
 
     if (d) {
       setData(d);
@@ -26,18 +40,6 @@ const Home: React.FC = () => {
   useEffect(() => {
     loadData();
   }, []);
-
-  const items = [
-    { action_type: 1 },
-    { action_type: 2 },
-    { action_type: 3 },
-    { action_type: 3 },
-    { action_type: 3 },
-    { action_type: 2 },
-    { action_type: 2 },
-    { action_type: 1 },
-    { action_type: 2 },
-  ];
 
   return (
     <>
@@ -53,13 +55,25 @@ const Home: React.FC = () => {
             >
               <IconButton
                 onClick={() => navigate("/dashboard")}
-                sx={{ ...styles.iconButton, border: `2px solid ${theme.palette.primary.main}` }}
+                sx={{
+                  ...styles.iconButton,
+                  border: `2px solid ${theme.palette.primary.main}`,
+                }}
               >
-                <SignalCellularAltIcon sx={{ ...styles.icon, color: `${theme.palette.primary.main}` }} />
+                <SignalCellularAltIcon
+                  sx={{
+                    ...styles.icon,
+                    color: `${theme.palette.primary.main}`,
+                  }}
+                />
               </IconButton>
               <Box sx={styles.boxText}>
-                <Typography sx={{ ...styles.centerText, ...styles.text2 }}>52 cm</Typography>
-                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>Comprimento</Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text2 }}>
+                  {profile?.height} cm
+                </Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
+                  Comprimento
+                </Typography>
               </Box>
             </Grid>
             <Grid
@@ -71,8 +85,12 @@ const Home: React.FC = () => {
             >
               <Avatar src={baby} sx={{ width: 90, height: 90 }} />
               <Box sx={styles.boxText}>
-                <Typography sx={{ ...styles.centerText, ...styles.text1 }}>Noah</Typography>
-                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>x dia(s)</Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text1 }}>
+                  {profile?.name}
+                </Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
+                  x dia(s)
+                </Typography>
               </Box>
             </Grid>
             <Grid
@@ -84,22 +102,43 @@ const Home: React.FC = () => {
             >
               <IconButton
                 onClick={() => navigate("/settings")}
-                sx={{ ...styles.iconButton, border: `2px solid ${theme.palette.primary.main}` }}
+                sx={{
+                  ...styles.iconButton,
+                  border: `2px solid ${theme.palette.primary.main}`,
+                }}
               >
-                <SettingsIcon sx={{ ...styles.icon, color: `${theme.palette.primary.main}` }} />
+                <SettingsIcon
+                  sx={{
+                    ...styles.icon,
+                    color: `${theme.palette.primary.main}`,
+                  }}
+                />
               </IconButton>
               <Box sx={styles.boxText}>
-                <Typography sx={{ ...styles.centerText, ...styles.text2 }}>3.80kg</Typography>
-                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>Peso</Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text2 }}>
+                  {profile?.weight} kg
+                </Typography>
+                <Typography sx={{ ...styles.centerText, ...styles.text3 }}>
+                  Peso
+                </Typography>
               </Box>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item={true} size={{ xs: 12 }} sx={{ position: "relative", bottom: "-13px" }}>
+        <Grid
+          item={true}
+          size={{ xs: 12 }}
+          sx={{ position: "relative", bottom: "-13px" }}
+        >
           <Grid container={true}>
             {ACTIONS.map((action, idx) => {
               return (
-                <Grid index={idx} sx={{ padding: "16px" }} item={true} size={{ xs: 4 }}>
+                <Grid
+                  index={idx}
+                  sx={{ padding: "16px" }}
+                  item={true}
+                  size={{ xs: 4 }}
+                >
                   <CardNewItem {...action} />
                 </Grid>
               );
@@ -114,7 +153,11 @@ const Home: React.FC = () => {
           backgroundColor: theme.palette.primary.main,
         }}
       >
-        <Grid item={true} size={{ xs: 12 }} sx={{ height: "58vh", marginTop: "150px", overflow: "auto" }}>
+        <Grid
+          item={true}
+          size={{ xs: 12 }}
+          sx={{ height: "58vh", marginTop: "150px", overflow: "auto" }}
+        >
           <CustomList items={data} />
         </Grid>
       </Grid>

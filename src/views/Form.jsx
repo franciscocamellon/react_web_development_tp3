@@ -4,6 +4,7 @@ import { AppBar, Button, Diaper, Eat, Grid, Sleep } from "../components";
 import { useAppContext } from "../Context";
 import { drop, get, save, update } from "../services/database";
 import { getTitle, validateFields } from "../utils/actions";
+import { getUser } from "../utils/core";
 
 const Form = () => {
   const { translate, showAlertMessage } = useAppContext();
@@ -30,7 +31,8 @@ const Form = () => {
 
   const loadData = async (id) => {
     if (id) {
-      setData(get(id));
+      const result = await get("action_students", [{ field: "id", value: id }]);
+      setData(result);
     }
   };
 
@@ -74,27 +76,45 @@ const Form = () => {
             type="submit"
             fullWidth
             variant="contained"
-            onClick={() => {
+            onClick={async () => {
               try {
                 const fields = validateFields(data, actionType);
                 if (fields.length === 0) {
                   if (id) {
-                    update(data, id);
+                    await update("action_students", data, id);
                   } else {
-                    save(data);
+                    data.user_id = getUser().id;
+                    await save("action_students", data);
                   }
-                  showAlertMessage(`Item ${id ? "editado" : "criado"} com sucesso!`, "success");
+                  showAlertMessage(
+                    `Item ${id ? "editado" : "criado"} com sucesso!`,
+                    "success"
+                  );
                   setTimeout(() => {
                     navigate("/");
                   }, 2000);
                 } else {
-                  showAlertMessage(`Os campos ${fields.join(", ")} são obrigatórios!`, "error");
+                  showAlertMessage(
+                    `Os campos ${fields.join(", ")} são obrigatórios!`,
+                    "error"
+                  );
                 }
               } catch (error) {
-                showAlertMessage(`Erro ao ${id ? "editar" : "criar"} item: ` + error, "error");
+                showAlertMessage(
+                  `Erro ao ${id ? "editar" : "criar"} item: ` + error,
+                  "error"
+                );
               }
             }}
-            sx={{ mt: 3, mb: 2, position: "absolute", bottom: 0, left: 0, borderRadius: "0 !important", margin: 0 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              borderRadius: "0 !important",
+              margin: 0,
+            }}
           >
             {translate("save")}
           </Button>

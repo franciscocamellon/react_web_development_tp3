@@ -47,7 +47,6 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [alertMessage, setAlertMessage] = useState("");
 
   const changeLanguage = (lang) => {
-    console.log(lang);
     i18n.changeLanguage(lang);
     localStorage.setItem("language", lang);
   };

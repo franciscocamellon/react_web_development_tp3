@@ -15,4 +15,10 @@ const handleOnChange = (data, setData, value, field) => {
   }));
 };
 
-export { handleOnChange, adjustDateTimeForTimezone };
+const getUser = () => {
+  if (localStorage.getItem("session")) {
+    return JSON.parse(localStorage.getItem("session")).user;
+  }
+};
+
+export { handleOnChange, adjustDateTimeForTimezone, getUser };
