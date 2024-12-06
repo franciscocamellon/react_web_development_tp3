@@ -54,5 +54,7 @@
   "min": "Min.",
   "from": "From",
   "to": "To",
-  "days": "Day(s)"
+  "days": "Day(s)",
+  "add-some": "Add something",
+  "logout": "Logout"
 }

@@ -54,5 +54,7 @@
   "min": "Min.",
   "from": "De",
   "to": "Hasta",
-  "days": "Día(s)"
+  "days": "Día(s)",
+  "add-some": "Agrega algo",
+  "logout": "Cerrar sesión"
 }

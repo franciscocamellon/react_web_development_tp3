@@ -54,5 +54,7 @@
   "min": "Min.",
   "from": "De",
   "to": "Até",
-  "days": "Dia(s)"
+  "days": "Dia(s)",
+  "add-some": "Adicione algo",
+  "logout": "Sair"
 }
