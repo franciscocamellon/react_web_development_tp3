@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Box, Card, Fab, Typography } from "..";
 import AddIcon from "@mui/icons-material/Add";
+import { useAppContext } from "../../Context";
 
 const cardNewItem = ({ title, actionType, Icon, color }) => {
   const navigate = useNavigate();
+  const { translate } = useAppContext();
   return (
     <Card sx={{ borderRadius: "10%", overflow: "visible" }}>
       <Box sx={{ ...styles.centerBox }}>
@@ -18,7 +20,7 @@ const cardNewItem = ({ title, actionType, Icon, color }) => {
             width: "90%",
           }}
         >
-          {title}
+          {translate(title)}
         </Typography>
       </Box>
       <Box sx={{ ...styles.centerBox }}>
@@ -30,12 +32,17 @@ const cardNewItem = ({ title, actionType, Icon, color }) => {
             color: "#8f8f8f",
           }}
         >
-          Adicione algo
+          {translate("add-some")}
         </Typography>
       </Box>
       <Box sx={{ ...styles.centerBox }}>
         <Fab
-          sx={{ color: color, background: "#fff", position: "relative", bottom: "-20px" }}
+          sx={{
+            color: color,
+            background: "#fff",
+            position: "relative",
+            bottom: "-20px",
+          }}
           onClick={() => {
             navigate(`new/${actionType}`);
           }}
